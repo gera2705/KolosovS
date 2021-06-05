@@ -13,14 +13,7 @@
 
 </item>
 
-    <item>
 
-        <bitmap
-            android:src="@drawable/right_arrow"
-            android:gravity="center"
-
-            />
-    </item>
 
 
 
