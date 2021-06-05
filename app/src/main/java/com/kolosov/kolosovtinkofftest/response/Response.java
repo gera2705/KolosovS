@@ -2,7 +2,7 @@ package com.kolosov.kolosovtinkofftest.response;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-//import com.kolosov.kolosovtinkofftest.models.CardModel;
+
 
 public class Response {
 
