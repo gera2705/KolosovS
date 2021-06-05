@@ -1,5 +1,6 @@
 package com.kolosov.kolosovtinkofftest.request;
 
+import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import com.kolosov.kolosovtinkofftest.utils.Credentials;
 import com.kolosov.kolosovtinkofftest.utils.DevelopersLifeApi;
 
@@ -15,6 +16,7 @@ public class NetworkService {
         mRetrofit = new Retrofit.Builder()
                 .baseUrl(Credentials.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
     }
 

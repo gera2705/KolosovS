@@ -33,17 +33,24 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+
         addButton = findViewById(R.id.button);
         imageView = findViewById(R.id.imageView);
         textView = findViewById(R.id.textView);
 
+//        Log.d("TIME" , "1");
         getRetrofitResponse();
-        textView.setText(desk);
-//            GetRetrofitResponse();
-        Glide.with(this)
-                .load(URL)
-                .centerCrop()
-                .into(imageView);
+//        Log.d("TIME" , "2");
+//        textView.setText(desk);
+//////            GetRetrofitResponse();
+//         Glide.with(this)
+//                    .asGif()
+//                    .load(URL)
+//                    .placeholder(R.drawable.load_gif)
+//                    .centerCrop()
+//                    .into(imageView);
+//        Log.d("TIME" , "3");
 //
       //  String url = "https://static.devli.ru/public/images/gifs/201309/4f35e384-7831-4da1-a857-d89196bf93e4.gif";
      //   String url = "https://miro.medium.com/max/3840/1*K2efK5T13AtQz4bZqXbQgQ.gif";
@@ -51,13 +58,10 @@ public class MainActivity extends AppCompatActivity {
 //
         addButton.setOnClickListener(v -> {
 
+            Log.d("TIME" , "1");
             getRetrofitResponse();
-            textView.setText(desk);
-//            GetRetrofitResponse();
-            Glide.with(this)
-                    .load(URL)
-                    .centerCrop()
-                    .into(imageView);
+            Log.d("TIME" , "2");
+
         });
     }
     private void getRetrofitResponse() {
@@ -68,16 +72,30 @@ public class MainActivity extends AppCompatActivity {
                 .enqueue(new Callback<Response>() {
                     @Override
                     public void onResponse(Call<Response> call, retrofit2.Response<Response> response) {
-                        Log.v("Tag" , "OK" + response.body().toString());
-                        String d = response.body().getDescription();
-                        String u = response.body().getGifURL();
-                        Log.v("Tag" , d + " " + u);
+                       // Log.v("Tag" , "OK" + response.body().toString());
+                        desk = response.body().getDescription();
                         try {
-                            URL = response.body().getGifURL().replaceFirst("http", "https");
+                        URL = response.body().getGifURL().replaceFirst("http", "https");
                         }catch (Exception e){
                             e.printStackTrace();
                         }
-                        desk = response.body().getDescription();
+                        Log.d("TIME" , "1.5");
+                        Log.v("Tag" , desk + " " + URL);
+                        textView.setText(desk);
+//            GetRetrofitResponse();
+                        Glide.with(MainActivity.this)
+                                .asGif()
+                                .load(URL)
+                                .placeholder(R.drawable.load_gif)
+                                .fitCenter()
+                                .into(imageView);
+                        Log.d("TIME" , "3");
+//                        try {
+//                            URL = response.body().getGifURL().replaceFirst("http", "https");
+//                        }catch (Exception e){
+//                            e.printStackTrace();
+//                        }
+//                        desk = response.body().getDescription();
                     }
 
                     @Override
