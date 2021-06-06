@@ -11,11 +11,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.KolosovTinkoffTest">
-        <activity android:name=".TopActivity"></activity>
-        <activity android:name=".HotActivity" />
-        <activity android:name=".LatestActivity" />
+        <activity android:name=".activities.TopActivity"></activity>
+        <activity android:name=".activities.HotActivity" />
+        <activity android:name=".activities.LatestActivity" />
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.MainActivity"
             android:screenOrientation="portrait"
             android:usesCleartextTraffic="true">
             <intent-filter>

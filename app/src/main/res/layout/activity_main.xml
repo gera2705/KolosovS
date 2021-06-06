@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/light_gray"
-    tools:context=".MainActivity"
-    >
+    tools:context=".activities.MainActivity">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_vertical"
@@ -34,87 +33,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/app_name"
-        android:textColor="#000000"
+        android:textColor="@color/black"
         android:textSize="36sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/guideline_vertical_end"
         app:layout_constraintStart_toStartOf="@+id/guideline_vertical"
         app:layout_constraintTop_toTopOf="@+id/guideline_horizontal" />
 
-
-<!--    <RadioGroup-->
-<!--        android:id="@+id/radioGroup"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginTop="8dp"-->
-<!--        android:orientation="horizontal"-->
-
-<!--        app:layout_constraintEnd_toStartOf="@+id/guideline_vertical_end"-->
-<!--        app:layout_constraintStart_toStartOf="@+id/guideline_vertical"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/app_name">-->
-
-<!--        <RadioButton-->
-<!--            android:id="@+id/random_radio_button"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginStart="0dp"-->
-<!--            android:layout_marginEnd="4dp"-->
-<!--            android:background="@drawable/radio_button_selector"-->
-<!--            android:button="@android:color/transparent"-->
-<!--            android:paddingStart="4dp"-->
-<!--            android:paddingTop="4dp"-->
-<!--            android:paddingEnd="4dp"-->
-<!--            android:paddingBottom="4dp"-->
-<!--            android:text="Рандомный"-->
-<!--            android:textSize="16sp" />-->
-
-<!--        <RadioButton-->
-<!--            android:id="@+id/latest_radio_button"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginStart="0dp"-->
-<!--            android:layout_marginEnd="4dp"-->
-<!--            android:background="@drawable/radio_button_selector"-->
-<!--            android:button="@android:color/transparent"-->
-<!--            android:paddingStart="4dp"-->
-<!--            android:paddingTop="4dp"-->
-<!--            android:paddingEnd="4dp"-->
-<!--            android:paddingBottom="4dp"-->
-<!--            android:text="Последние"-->
-<!--            android:textSize="16sp" />-->
-
-<!--        <RadioButton-->
-<!--            android:id="@+id/top_radio_button"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginStart="0dp"-->
-<!--            android:layout_marginEnd="4dp"-->
-<!--            android:background="@drawable/radio_button_selector"-->
-<!--            android:button="@android:color/transparent"-->
-<!--            android:paddingStart="4dp"-->
-<!--            android:paddingTop="4dp"-->
-<!--            android:paddingEnd="4dp"-->
-<!--            android:paddingBottom="4dp"-->
-<!--            android:text="Лучшее"-->
-<!--            android:textSize="16sp" />-->
-
-<!--        <RadioButton-->
-<!--            android:id="@+id/hot_radio_button"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginStart="0dp"-->
-<!--            android:layout_marginEnd="4dp"-->
-<!--            android:background="@drawable/radio_button_selector"-->
-<!--            android:button="@android:color/transparent"-->
-<!--            android:paddingStart="4dp"-->
-<!--            android:paddingTop="4dp"-->
-<!--            android:paddingEnd="4dp"-->
-<!--            android:paddingBottom="4dp"-->
-<!--            android:text="Горячее"-->
-<!--            android:textSize="16sp" />-->
-
-
-<!--    </RadioGroup>-->
 
     <androidx.cardview.widget.CardView
         android:id="@+id/imageViewCard"
@@ -131,9 +56,8 @@
             android:id="@+id/imageView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-
+            android:contentDescription="@string/gif_image_description"
             android:scaleType="fitXY"
-
             tools:srcCompat="@tools:sample/avatars" />
 
 
@@ -143,16 +67,15 @@
         android:id="@+id/descriptionTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
-
         android:background="@drawable/custom_image_view"
-
         android:gravity="center"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
         android:text="@string/loading_text_view"
-        android:textColor="#000000"
+        android:textColor="@color/black"
         app:layout_constraintEnd_toStartOf="@+id/guideline_vertical_end"
         app:layout_constraintStart_toStartOf="@+id/guideline_vertical"
         app:layout_constraintTop_toBottomOf="@+id/imageViewCard" />
@@ -161,12 +84,11 @@
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
         android:layout_marginStart="68dp"
         android:layout_marginTop="16dp"
-
         android:layout_marginEnd="64dp"
         android:background="@drawable/custom_button"
+        android:contentDescription="@string/forward_button_description"
         android:src="@drawable/ic_forward"
         app:layout_constraintEnd_toStartOf="@+id/guideline_vertical_end"
         app:layout_constraintStart_toEndOf="@+id/button3"
@@ -176,12 +98,10 @@
         android:id="@+id/button3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
         android:layout_marginStart="64dp"
-
-
         android:layout_marginTop="16dp"
         android:background="@drawable/custom_button"
+        android:contentDescription="@string/back_button_description"
         android:rotation="180"
         android:src="@drawable/ic_forward"
         app:layout_constraintEnd_toStartOf="@+id/button"
@@ -192,32 +112,27 @@
         android:id="@+id/reboot"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
-        android:textStyle="bold"
-        android:textColor="@color/main_color"
-        android:background="@android:color/transparent"
         android:layout_marginBottom="24dp"
+        android:background="@android:color/transparent"
         android:text="@string/reboot_button_text"
+        android:textColor="@color/main_color"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/imageViewCard"
         app:layout_constraintEnd_toStartOf="@+id/guideline_vertical_end"
         app:layout_constraintHorizontal_bias="0.482"
         app:layout_constraintStart_toStartOf="@+id/guideline_vertical" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/navigation"
         app:itemBackground="@color/white"
-        app:itemTextColor="@color/main_color"
-
         app:itemIconTint="@drawable/menu_selector"
-
-        app:menu="@menu/menu_bottom"
-
+        app:itemTextColor="@color/main_color"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        />
+        app:menu="@menu/menu_bottom" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

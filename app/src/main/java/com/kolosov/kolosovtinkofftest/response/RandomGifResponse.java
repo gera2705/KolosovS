@@ -15,34 +15,11 @@ public class RandomGifResponse {
     @Expose()
     private String gifURL;
 
-
     private DataModel dataModel;
 
     public DataModel getDataModel() {
         return new DataModel(description , gifURL);
     }
 
-    //    @SerializedName("description")
-//    @Expose()
-//    private String description;
-//
-//    @SerializedName("gifURL")
-//    @Expose()
-//    private String gifURL;
-//
-//    public String getDescription() {
-//        return description;
-//    }
-//
-//    public String getGifURL() {
-//        return gifURL;
-//    }
-//
-//    @Override
-//    public String toString() {
-//        return "Response{" +
-//                "description='" + description + '\'' +
-//                ", gifURL='" + gifURL + '\'' +
-//                '}';
-//    }
+
 }

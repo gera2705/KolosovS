@@ -1,4 +1,4 @@
-package com.kolosov.kolosovtinkofftest;
+package com.kolosov.kolosovtinkofftest.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.kolosov.kolosovtinkofftest.R;
 
 public class HotActivity extends AppCompatActivity {
 
@@ -35,6 +36,7 @@ public class HotActivity extends AppCompatActivity {
                 case R.id.latest:
                     Intent intent = new Intent(HotActivity.this , LatestActivity.class);
                     startActivity(intent);
+                    overridePendingTransition(0 , 0);
                     this.finish();
                     break;
 
@@ -42,12 +44,14 @@ public class HotActivity extends AppCompatActivity {
                 case R.id.top:
                     Intent intent1 = new Intent(HotActivity.this , TopActivity.class);
                     startActivity(intent1);
+                    overridePendingTransition(0 , 0);
                     this.finish();
                     break;
 
                 case R.id.random:
                     Intent intent2 = new Intent(HotActivity.this , MainActivity.class);
                     startActivity(intent2);
+                    overridePendingTransition(0 , 0);
                     this.finish();
                     break;
             }
