@@ -46,6 +46,10 @@ public class LatestActivity extends AppCompatActivity {
     private ArrayList<String> urls;
     private ArrayList<String> descriptions;
 
+    public static void setTotalCount(int totalCount) {
+        LatestActivity.totalCount = totalCount;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,17 +123,19 @@ public class LatestActivity extends AppCompatActivity {
                 .enqueue(new Callback<AllGifsResponse>() {
                     @Override
                     public void onResponse(Call<AllGifsResponse> call, Response<AllGifsResponse> response) {
-                        totalCount = response.body().getTotalCount();
-                        List<DataModel> dataModel = response.body().getDataModelList();
-
-                        for (DataModel s : dataModel) {
-                            urls.add(s.getGifURL().replaceFirst("http", "https"));
-                            descriptions.add(s.getDescription());
-                        }
-
                         try {
+                            totalCount = response.body().getTotalCount();
+                            List<DataModel> dataModel = response.body().getDataModelList();
+
+                            for (DataModel s : dataModel) {
+                                urls.add(s.getGifURL().replaceFirst("http", "https"));
+                                descriptions.add(s.getDescription());
+                            }
+
                             putGif(urls.get(positionCount - 1), descriptions.get(positionCount - 1));
+
                         } catch (Exception e) {
+                            onFailure(call, new Throwable());
                             e.printStackTrace();
                         }
 
@@ -141,7 +147,7 @@ public class LatestActivity extends AppCompatActivity {
                         forwardButton.setEnabled(false);
                         backButton.setEnabled(false);
                         gifImageView.setImageResource(R.drawable.ic_error_image);
-                        descriptionTextView.setText("Нет подключения к интернету!");
+                        descriptionTextView.setText("Ошибка!");
                         rebootButton.setVisibility(View.VISIBLE);
                         rebootButton.setEnabled(true);
                     }

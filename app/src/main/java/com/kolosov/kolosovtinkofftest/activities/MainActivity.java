@@ -122,6 +122,7 @@ public class MainActivity extends AppCompatActivity {
                                 descriptions.add(description);
 
                             } catch (Exception e) {
+                                onFailure(call , new Throwable());
                                 e.printStackTrace();
                             }
 
@@ -134,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
                             forwardButton.setEnabled(false);
                             backButton.setEnabled(false);
                             gifImageView.setImageResource(R.drawable.ic_error_image);
-                            descriptionTextView.setText("Нет подключения к интернету!");
+                            descriptionTextView.setText("Ошибка!");
                             rebootButton.setVisibility(View.VISIBLE);
                             rebootButton.setEnabled(true);
 

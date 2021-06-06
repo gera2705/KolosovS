@@ -59,7 +59,7 @@ public class TopActivity extends AppCompatActivity {
 
     }
 
-    private void init(){
+    private void init() {
         forwardButton = findViewById(R.id.button);
         gifImageView = findViewById(R.id.imageView);
         descriptionTextView = findViewById(R.id.descriptionTextView);
@@ -76,13 +76,12 @@ public class TopActivity extends AppCompatActivity {
         positionCount = 1;
 
         forwardButton.setOnClickListener(v -> {
-            if(positionCount == 5){
+            if (positionCount == 5) {
                 positionCount = 1;
                 urls.clear();
                 descriptions.clear();
-
                 getAllGifsResponse(rnd(2368));
-            }else {
+            } else {
                 putGif(urls.get(positionCount), descriptions.get(positionCount));
                 positionCount++;
             }
@@ -90,18 +89,26 @@ public class TopActivity extends AppCompatActivity {
         });
 
         backButton.setOnClickListener(v -> {
-            if(positionCount - 1 == 0){
+            if (positionCount - 1 == 0) {
                 Toast.makeText(TopActivity.this, "Гифки сзади закончились :(", Toast.LENGTH_SHORT).show();
-            }else {
+            } else {
 
-                putGif(urls.get(positionCount -2) , descriptions.get(positionCount -2));
+                putGif(urls.get(positionCount - 2), descriptions.get(positionCount - 2));
                 positionCount--;
             }
 
         });
+
+        rebootButton.setOnClickListener(v -> {
+            getAllGifsResponse(rnd(2368));
+            forwardButton.setEnabled(true);
+            backButton.setEnabled(true);
+            rebootButton.setVisibility(View.INVISIBLE);
+            rebootButton.setEnabled(false);
+        });
     }
 
-    private void putGif(String URL , String description){
+    private void putGif(String URL, String description) {
 
         descriptionTextView.setText(description);
 
@@ -116,27 +123,26 @@ public class TopActivity extends AppCompatActivity {
                 .into(gifImageView);
     }
 
-    private void getAllGifsResponse(int pageNumber){
+    private void getAllGifsResponse(int pageNumber) {
         NetworkService.getInstance()
                 .getDevelopersLifeApi()
                 .getLatestGif("top", pageNumber)
                 .enqueue(new Callback<AllGifsResponse>() {
                     @Override
                     public void onResponse(Call<AllGifsResponse> call, Response<AllGifsResponse> response) {
-                        totalCount = response.body().getTotalCount();
-                        List<DataModel> dataModel = response.body().getDataModelList();
-
-                        for (DataModel s: dataModel) {
-                            urls.add(s.getGifURL().replaceFirst("http", "https"));
-                            descriptions.add(s.getDescription());
-                            Log.d("DATA" , s.getDescription());
-                        }
-
-
                         try {
-                            putGif(urls.get(positionCount -1) , descriptions.get(positionCount -1));
-                        }catch (Exception e)
-                        {
+                            totalCount = response.body().getTotalCount();
+                            List<DataModel> dataModel = response.body().getDataModelList();
+
+                            for (DataModel s : dataModel) {
+                                urls.add(s.getGifURL().replaceFirst("http", "https"));
+                                descriptions.add(s.getDescription());
+                            }
+
+
+                            putGif(urls.get(positionCount - 1), descriptions.get(positionCount - 1));
+                        } catch (Exception e) {
+                            onFailure(call, new Throwable());
                             e.printStackTrace();
                         }
 
@@ -148,49 +154,47 @@ public class TopActivity extends AppCompatActivity {
 
                         forwardButton.setEnabled(false);
                         backButton.setEnabled(false);
-                        Log.d("ERROR" , "error");
                         gifImageView.setImageResource(R.drawable.ic_error_image);
-                        descriptionTextView.setText("Нет подключения к интернету!");
+                        descriptionTextView.setText("Ошибка!");
                         rebootButton.setVisibility(View.VISIBLE);
                         rebootButton.setEnabled(true);
                     }
                 });
     }
 
-    private static int rnd(int max)
-    {
+    private static int rnd(int max) {
         return (int) (Math.random() * ++max);
     }
 
 
-    void loadMenu(){
+    void loadMenu() {
 
         Menu menu = bottomNavigationView.getMenu();
         MenuItem menuItem = menu.getItem(2);
         menuItem.setChecked(true);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
-            switch (item.getItemId()){
+            switch (item.getItemId()) {
 
                 case R.id.latest:
-                    Intent intent = new Intent(TopActivity.this , LatestActivity.class);
+                    Intent intent = new Intent(TopActivity.this, LatestActivity.class);
                     startActivity(intent);
-                    overridePendingTransition(0 , 0);
+                    overridePendingTransition(0, 0);
                     this.finish();
                     break;
 
 
                 case R.id.random:
-                    Intent intent1 = new Intent(TopActivity.this , MainActivity.class);
+                    Intent intent1 = new Intent(TopActivity.this, MainActivity.class);
                     startActivity(intent1);
-                    overridePendingTransition(0 , 0);
+                    overridePendingTransition(0, 0);
                     this.finish();
                     break;
 
                 case R.id.hot:
-                    Intent intent2 = new Intent(TopActivity.this , HotActivity.class);
+                    Intent intent2 = new Intent(TopActivity.this, HotActivity.class);
                     startActivity(intent2);
-                    overridePendingTransition(0 , 0);
+                    overridePendingTransition(0, 0);
                     this.finish();
                     break;
             }
