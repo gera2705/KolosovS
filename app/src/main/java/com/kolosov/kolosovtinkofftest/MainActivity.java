@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -25,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ImageButton forwardButton;
     private ImageButton backButton;
+    private Button rebootButton;
 
     private ImageView imageView;
     private TextView textView;
@@ -44,8 +47,11 @@ public class MainActivity extends AppCompatActivity {
 
         forwardButton = findViewById(R.id.button);
         imageView = findViewById(R.id.imageView);
-        textView = findViewById(R.id.textView);
+        textView = findViewById(R.id.descriptionTextView);
         backButton = findViewById(R.id.button3);
+        rebootButton = findViewById(R.id.reboot);
+        rebootButton.setVisibility(View.INVISIBLE);
+        rebootButton.setEnabled(false);
         count = 1;
 
         getRetrofitResponse();
@@ -76,37 +82,54 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+        rebootButton.setOnClickListener(v -> {
+            getRetrofitResponse();
+            forwardButton.setEnabled(true);
+            backButton.setEnabled(true);
+            rebootButton.setVisibility(View.INVISIBLE);
+            rebootButton.setEnabled(false);
+        });
+
     }
     private void getRetrofitResponse() {
 
-        NetworkService.getInstance()
-                .getDevelopersLifeApi()
-                .getRandomGif()
-                .enqueue(new Callback<Response>() {
-                    @Override
-                    public void onResponse(Call<Response> call, retrofit2.Response<Response> response) {
 
-                        description = response.body().getDescription();
-                        try {
-                             URL = response.body().getGifURL().replaceFirst("http", "https");
-                             urls.add(URL);
-                             descriptions.add(description);
+            NetworkService.getInstance()
+                    .getDevelopersLifeApi()
+                    .getRandomGif()
+                    .enqueue(new Callback<Response>() {
+                        @Override
+                        public void onResponse(Call<Response> call, retrofit2.Response<Response> response) {
 
-                        }catch (Exception e){
-                            e.printStackTrace();
+                            description = response.body().getDescription();
+                            try {
+                                URL = response.body().getGifURL().replaceFirst("http", "https");
+                                urls.add(URL);
+                                descriptions.add(description);
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                            putGif(URL, description);
+
+                            Log.d("TIME", "3");
+
                         }
 
-                        putGif(URL , description);
+                        @Override
+                        public void onFailure(Call<Response> call, Throwable t) {
+                            forwardButton.setEnabled(false);
+                            backButton.setEnabled(false);
+                            Log.d("ERROR" , "error");
+                            imageView.setImageResource(R.drawable.ic_warning);
+                            textView.setText("Нет подключения к интернету!");
+                            rebootButton.setVisibility(View.VISIBLE);
+                            rebootButton.setEnabled(true);
 
-                        Log.d("TIME" , "3");
+                        }
+                    });
 
-                    }
-
-                    @Override
-                    public void onFailure(Call<Response> call, Throwable t) {
-
-                    }
-                });
 
     }
 
@@ -117,6 +140,7 @@ public class MainActivity extends AppCompatActivity {
                 .asGif()
                 .load(URL)
                 .placeholder(R.drawable.progress_bar)
+                .error(R.drawable.ic_warning)
                 .fitCenter()
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                 .into(imageView);
