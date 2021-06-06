@@ -2,20 +2,22 @@ package com.kolosov.kolosovtinkofftest;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.kolosov.kolosovtinkofftest.models.DataModel;
 import com.kolosov.kolosovtinkofftest.request.NetworkService;
 //import com.kolosov.kolosovtinkofftest.request.Service;
@@ -35,11 +37,8 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton backButton;
     private Button rebootButton;
 
-    private RadioGroup radioGroup;
-    private RadioButton randomRadioButton;
-    private RadioButton latestRadioButton;
-    private RadioButton hotRadioButton;
-    private RadioButton topRadioButton;
+    private BottomNavigationView bottomNavigationView;
+
 
     private ImageView imageView;
     private TextView textView;
@@ -64,61 +63,16 @@ public class MainActivity extends AppCompatActivity {
         backButton = findViewById(R.id.button3);
         rebootButton = findViewById(R.id.reboot);
 
-        radioGroup = findViewById(R.id.radioGroup);
+        bottomNavigationView = (BottomNavigationView)findViewById(R.id.navigation);
 
-        randomRadioButton = findViewById(R.id.random_radio_button);
-        latestRadioButton = findViewById(R.id.latest_radio_button);
-        hotRadioButton = findViewById(R.id.hot_radio_button);
-        topRadioButton = findViewById(R.id.top_radio_button);
-
-
-        randomRadioButton.setChecked(true);
         rebootButton.setVisibility(View.INVISIBLE);
         rebootButton.setEnabled(false);
         count = 1;
 
 
 
-        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switch (checkedId) {
-                    case R.id.random_radio_button: {
-                        Toast.makeText(getApplicationContext(), "Рандом", Toast.LENGTH_SHORT)
-                                .show();
+        loadMenu();
 
-                        break;
-                    }
-                    case R.id.latest_radio_button: {
-                        //2585 стр
-                        count = 1;
-
-                        int pageNumber = rnd(2585);
-                        getAllGifsResponse("latest" , pageNumber);
-
-
-                        Log.d("total" , String.valueOf(pageNumber));
-//                        Toast.makeText(getApplicationContext(), totalCount , Toast.LENGTH_SHORT)
-//                                .show();
-
-                        break;
-                    }
-                    case R.id.top_radio_button: {
-                        getAllGifsResponse("top" , 0);
-                        Toast.makeText(getApplicationContext(), "3", Toast.LENGTH_SHORT)
-                                .show();
-
-                        break;
-                    }
-                    case R.id.hot_radio_button: {
-                        Toast.makeText(getApplicationContext(), "Четв элемент нажат", Toast.LENGTH_SHORT)
-                                .show();
-                        getAllGifsResponse("hot" , 0);
-                        break;
-                    }
-                }
-            }
-        });
 
        // getAllGifsResponse();
 
@@ -158,32 +112,86 @@ public class MainActivity extends AppCompatActivity {
             rebootButton.setEnabled(false);
         });
 
+
+//        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(RadioGroup group, int checkedId) {
+//                switch (checkedId) {
+//                    case R.id.random_radio_button: {
+//                        Toast.makeText(getApplicationContext(), "Рандом", Toast.LENGTH_SHORT)
+//                                .show();
+//
+//                        break;
+//                    }
+//                    case R.id.latest_radio_button: {
+//                        //2585 стр
+//                        count = 1;
+//
+//                        int pageNumber = rnd(2585);
+//                        getAllGifsResponse("latest" , pageNumber);
+//
+//
+//                        putGif(urls.get(count -1 ) , descriptions.get(count -1));
+//
+//                        Log.d("total" , String.valueOf(pageNumber));
+//
+//                        forwardButton.setOnClickListener(v -> {
+//
+//                            putGif(urls.get(count - 1) , descriptions.get(count - 1));
+//
+//                            count++;
+//                            Log.d("count2" , String.valueOf(count));
+//
+//
+//                        });
+////                        Toast.makeText(getApplicationContext(), totalCount , Toast.LENGTH_SHORT)
+////                                .show();
+//
+//                        break;
+//                    }
+//                    case R.id.top_radio_button: {
+//                        getAllGifsResponse("top" , 0);
+//                        Toast.makeText(getApplicationContext(), "3", Toast.LENGTH_SHORT)
+//                                .show();
+//
+//                        break;
+//                    }
+//                    case R.id.hot_radio_button: {
+//                        Toast.makeText(getApplicationContext(), "Четв элемент нажат", Toast.LENGTH_SHORT)
+//                                .show();
+//                        getAllGifsResponse("hot" , 0);
+//                        break;
+//                    }
+//                }
+//            }
+//        });
+
     }
 
-    private void getAllGifsResponse(String category , int pageNumber){
-        NetworkService.getInstance()
-             .getDevelopersLifeApi()
-                .getLatestGif(category , pageNumber)
-              .enqueue(new Callback<AllGifsResponse>() {
-                  @Override
-                  public void onResponse(Call<AllGifsResponse> call, Response<AllGifsResponse> response) {
-                      totalCount = response.body().getTotalCount();
-                     List<DataModel> dataModel = response.body().getDataModelList();
-
-                      for (DataModel s: dataModel) {
-                          urls.add(s.getUrl());
-                          descriptions.add(s.getDescription());
-                          Log.d("DATA" , s.getDescription());
-                      }
-
-                  }
-
-                  @Override
-                  public void onFailure(Call<AllGifsResponse> call, Throwable t) {
-
-                  }
-              });
-    }
+//    private void getAllGifsResponse(String category , int pageNumber){
+//        NetworkService.getInstance()
+//             .getDevelopersLifeApi()
+//                .getLatestGif(category , pageNumber)
+//              .enqueue(new Callback<AllGifsResponse>() {
+//                  @Override
+//                  public void onResponse(Call<AllGifsResponse> call, Response<AllGifsResponse> response) {
+//                      totalCount = response.body().getTotalCount();
+//                     List<DataModel> dataModel = response.body().getDataModelList();
+//
+//                      for (DataModel s: dataModel) {
+//                          urls.add(s.getGifURL());
+//                          descriptions.add(s.getDescription());
+//                          Log.d("DATA" , s.getDescription());
+//                      }
+//
+//                  }
+//
+//                  @Override
+//                  public void onFailure(Call<AllGifsResponse> call, Throwable t) {
+//
+//                  }
+//              });
+//    }
 
     private void getRetrofitResponse() {
 
@@ -199,7 +207,7 @@ public class MainActivity extends AppCompatActivity {
                             try {
                                 DataModel dataModel = response.body().getDataModel();
 
-                                URL = dataModel.getUrl().replaceFirst("http", "https");
+                                URL = dataModel.getGifURL().replaceFirst("http", "https");
                                 description = dataModel.getDescription();
 //                                description = response.body().getDescription();
 //                                URL = response.body().getGifURL().replaceFirst("http", "https");
@@ -251,5 +259,39 @@ public class MainActivity extends AppCompatActivity {
     public static int rnd(int max)
     {
         return (int) (Math.random() * ++max);
+    }
+
+
+    void loadMenu(){
+
+        Menu menu = bottomNavigationView.getMenu();
+        MenuItem menuItem = menu.getItem(0);
+        menuItem.setChecked(true);
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+            switch (item.getItemId()){
+
+                case R.id.latest:
+                    Intent intent = new Intent(MainActivity.this , LatestActivity.class);
+                    startActivity(intent);
+                    this.finish();
+                    break;
+
+
+                case R.id.top:
+                    Intent intent1 = new Intent(MainActivity.this , TopActivity.class);
+                    startActivity(intent1);
+                    this.finish();
+                    break;
+
+                case R.id.hot:
+                    Intent intent2 = new Intent(MainActivity.this , HotActivity.class);
+                    startActivity(intent2);
+                    this.finish();
+                    break;
+            }
+
+            return false;
+        });
     }
 }

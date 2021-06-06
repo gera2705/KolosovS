@@ -3,20 +3,20 @@ package com.kolosov.kolosovtinkofftest.models;
 public class DataModel {
 
     private String description;
-    private String url;
+    private String gifURL;
 
 
-    public DataModel(String description, String url) {
+    public DataModel(String description, String gifURL) {
         this.description = description;
-        this.url = url;
+        this.gifURL = gifURL;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public String getUrl() {
-        return url;
+    public String getGifURL() {
+        return gifURL;
     }
 
 

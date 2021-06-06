@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/random"
+        android:title="@string/menu_title_random"
+        android:icon="@drawable/ic_random"
+        />
+
+    <item
+        android:id="@+id/latest"
+        android:title="@string/menu_title_new"
+        android:icon="@drawable/ic_new"/>
+
+    <item
+        android:id="@+id/top"
+        android:title="@string/menu_title_top"
+        android:icon="@drawable/ic_like"/>
+
+    <item
+        android:id="@+id/hot"
+        android:title="@string/menu_title_hot"
+        android:icon="@drawable/ic_hot"/>
+
+</menu>
