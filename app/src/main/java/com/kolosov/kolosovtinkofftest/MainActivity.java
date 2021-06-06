@@ -8,26 +8,38 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.kolosov.kolosovtinkofftest.models.DataModel;
 import com.kolosov.kolosovtinkofftest.request.NetworkService;
 //import com.kolosov.kolosovtinkofftest.request.Service;
-import com.kolosov.kolosovtinkofftest.response.Response;
+import com.kolosov.kolosovtinkofftest.response.AllGifsResponse;
+import com.kolosov.kolosovtinkofftest.response.RandomGifResponse;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
     private ImageButton forwardButton;
     private ImageButton backButton;
     private Button rebootButton;
+
+    private RadioGroup radioGroup;
+    private RadioButton randomRadioButton;
+    private RadioButton latestRadioButton;
+    private RadioButton hotRadioButton;
+    private RadioButton topRadioButton;
 
     private ImageView imageView;
     private TextView textView;
@@ -36,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     private String description;
 
     private static int count;
+    private static int totalCount;
 
     private ArrayList<String> urls = new ArrayList<>();
     private ArrayList<String> descriptions = new ArrayList<>();
@@ -50,9 +63,64 @@ public class MainActivity extends AppCompatActivity {
         textView = findViewById(R.id.descriptionTextView);
         backButton = findViewById(R.id.button3);
         rebootButton = findViewById(R.id.reboot);
+
+        radioGroup = findViewById(R.id.radioGroup);
+
+        randomRadioButton = findViewById(R.id.random_radio_button);
+        latestRadioButton = findViewById(R.id.latest_radio_button);
+        hotRadioButton = findViewById(R.id.hot_radio_button);
+        topRadioButton = findViewById(R.id.top_radio_button);
+
+
+        randomRadioButton.setChecked(true);
         rebootButton.setVisibility(View.INVISIBLE);
         rebootButton.setEnabled(false);
         count = 1;
+
+
+
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.random_radio_button: {
+                        Toast.makeText(getApplicationContext(), "Рандом", Toast.LENGTH_SHORT)
+                                .show();
+
+                        break;
+                    }
+                    case R.id.latest_radio_button: {
+                        //2585 стр
+                        count = 1;
+
+                        int pageNumber = rnd(2585);
+                        getAllGifsResponse("latest" , pageNumber);
+
+
+                        Log.d("total" , String.valueOf(pageNumber));
+//                        Toast.makeText(getApplicationContext(), totalCount , Toast.LENGTH_SHORT)
+//                                .show();
+
+                        break;
+                    }
+                    case R.id.top_radio_button: {
+                        getAllGifsResponse("top" , 0);
+                        Toast.makeText(getApplicationContext(), "3", Toast.LENGTH_SHORT)
+                                .show();
+
+                        break;
+                    }
+                    case R.id.hot_radio_button: {
+                        Toast.makeText(getApplicationContext(), "Четв элемент нажат", Toast.LENGTH_SHORT)
+                                .show();
+                        getAllGifsResponse("hot" , 0);
+                        break;
+                    }
+                }
+            }
+        });
+
+       // getAllGifsResponse();
 
         getRetrofitResponse();
 
@@ -91,24 +159,56 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
+    private void getAllGifsResponse(String category , int pageNumber){
+        NetworkService.getInstance()
+             .getDevelopersLifeApi()
+                .getLatestGif(category , pageNumber)
+              .enqueue(new Callback<AllGifsResponse>() {
+                  @Override
+                  public void onResponse(Call<AllGifsResponse> call, Response<AllGifsResponse> response) {
+                      totalCount = response.body().getTotalCount();
+                     List<DataModel> dataModel = response.body().getDataModelList();
+
+                      for (DataModel s: dataModel) {
+                          urls.add(s.getUrl());
+                          descriptions.add(s.getDescription());
+                          Log.d("DATA" , s.getDescription());
+                      }
+
+                  }
+
+                  @Override
+                  public void onFailure(Call<AllGifsResponse> call, Throwable t) {
+
+                  }
+              });
+    }
+
     private void getRetrofitResponse() {
 
 
             NetworkService.getInstance()
                     .getDevelopersLifeApi()
                     .getRandomGif()
-                    .enqueue(new Callback<Response>() {
+                    .enqueue(new Callback<RandomGifResponse>() {
                         @Override
-                        public void onResponse(Call<Response> call, retrofit2.Response<Response> response) {
+                        public void onResponse(Call<RandomGifResponse> call, retrofit2.Response<RandomGifResponse> response) {
 
-                            description = response.body().getDescription();
+
                             try {
-                                URL = response.body().getGifURL().replaceFirst("http", "https");
+                                DataModel dataModel = response.body().getDataModel();
+
+                                URL = dataModel.getUrl().replaceFirst("http", "https");
+                                description = dataModel.getDescription();
+//                                description = response.body().getDescription();
+//                                URL = response.body().getGifURL().replaceFirst("http", "https");
                                 urls.add(URL);
                                 descriptions.add(description);
 
                             } catch (Exception e) {
                                 e.printStackTrace();
+                               // textView.setText("Ошибка при загрузке изображения :(");
                             }
 
                             putGif(URL, description);
@@ -118,11 +218,11 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                         @Override
-                        public void onFailure(Call<Response> call, Throwable t) {
+                        public void onFailure(Call<RandomGifResponse> call, Throwable t) {
                             forwardButton.setEnabled(false);
                             backButton.setEnabled(false);
                             Log.d("ERROR" , "error");
-                            imageView.setImageResource(R.drawable.ic_warning);
+                            imageView.setImageResource(R.drawable.ic_error_image);
                             textView.setText("Нет подключения к интернету!");
                             rebootButton.setVisibility(View.VISIBLE);
                             rebootButton.setEnabled(true);
@@ -136,14 +236,20 @@ public class MainActivity extends AppCompatActivity {
     private void putGif(String URL , String description){
 
         textView.setText(description);
+
         Glide.with(MainActivity.this)
                 .asGif()
                 .load(URL)
                 .placeholder(R.drawable.progress_bar)
-                .error(R.drawable.ic_warning)
+                .error(R.drawable.ic_error_image)
+                .fallback(R.drawable.ic_error_image)
                 .fitCenter()
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                 .into(imageView);
     }
 
+    public static int rnd(int max)
+    {
+        return (int) (Math.random() * ++max);
+    }
 }

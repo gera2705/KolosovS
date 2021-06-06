@@ -1,13 +1,21 @@
 package com.kolosov.kolosovtinkofftest.utils;
 
-import com.kolosov.kolosovtinkofftest.response.Response;
+import com.kolosov.kolosovtinkofftest.response.AllGifsResponse;
+import com.kolosov.kolosovtinkofftest.response.RandomGifResponse;
+
+import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 
 
 public interface DevelopersLifeApi {
 
     @GET("https://developerslife.ru/random?json=true")
-    Call<Response> getRandomGif();
+    Call<RandomGifResponse> getRandomGif();
+
+    //https://developerslife.ru/latest/0?json=true
+    @GET("/{category}/{pageNumber}?json=true")
+    Call<AllGifsResponse> getLatestGif(@Path("category") String category , @Path("pageNumber") int pageNumber);
 }
