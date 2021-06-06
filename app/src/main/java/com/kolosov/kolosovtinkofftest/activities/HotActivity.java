@@ -153,7 +153,7 @@ public class HotActivity extends AppCompatActivity {
                         forwardButton.setEnabled(false);
                         backButton.setEnabled(false);
                         gifImageView.setImageResource(R.drawable.ic_error_image);
-                        descriptionTextView.setText("Ошибка!");
+                        descriptionTextView.setText("Ошибка!\np.s. При запросе к разделу hot, api всегда возвращает пустой массив :(");
                         rebootButton.setVisibility(View.VISIBLE);
                         rebootButton.setEnabled(true);
                     }
